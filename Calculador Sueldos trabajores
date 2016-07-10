@@ -1,0 +1,37 @@
+package trabajador;
+
+import javax.swing.JOptionPane;
+public class Trabajador {
+    public int hrt, suel, turno, r;
+    public String nombre;
+
+    public void ingresedatos(){
+        nombre=JOptionPane.showInputDialog("ingrese su nombre");
+        turno=Integer.parseInt(JOptionPane.showInputDialog("ingrese en que horario trabajo 1=diurno, 2=nocturno"));
+        hrt=Integer.parseInt(JOptionPane.showInputDialog("ingrese el numero total de hora"));
+    }
+
+    public int cal(){
+        r=(10*hrt);
+        return r;
+    }
+
+    public int cal1(){
+        r=(15*hrt);
+        return r;
+    }
+
+    public static void main(String[] args){
+        Trabajador p=new Trabajador();
+        p.ingresedatos();
+
+        if(p.turno==1){
+            JOptionPane.showMessageDialog(null,"sr: "+p.nombre +"\nsu sueldo es:"+p.cal());
+        }   
+        else{
+            if(p.turno==2){
+                JOptionPane.showMessageDialog(null,"sr: "+p.nombre+"\nsu sueldo es:"+p.cal1());
+            }
+        }
+    }
+}
