@@ -1,0 +1,143 @@
+#include <iostream>
+#include <windows.h>
+#include <stdlib.h>
+#include <conio.h>
+
+using namespace std;
+
+//Para que el cursor se ponga en la posicion actual y no este parpadenado
+void goxy(int x, int y){
+    COORD coord;
+    coord.X=x; coord.Y=y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+char mundo[79][30]={' '};
+char d_muro = (char) 178;
+bool Salir = false;
+
+class personaje{
+public:
+    int x;
+    int y;
+    int direccion;
+};
+
+personaje guerrero;
+personaje enemigo1;
+
+void ImprimeMundo(){
+    for(int y=0;y<30;y++){
+        for(int x=0;x<79;x++){
+                cout<<mundo[x][y];
+        }
+    cout<<endl;
+
+    }
+}
+
+void MoverPersonaje(int _x, int _y){
+
+    if(mundo[_x][_y] ==d_muro){//Hay un muro?
+        return;//Salte y no hagas nada
+    }
+    if(mundo[_x][_y] == (char)4){
+        Salir = true;
+        return;
+    }
+
+        mundo[guerrero.x][guerrero.y]= ' '; //Ya no esta ahi
+        guerrero.x = _x;///movemos guerrero
+        guerrero.y = _y;
+        mundo[guerrero.direccionx][guerrero.y]=(char)1;
+}
+
+void MoverEnemigoHorizontal(personaje& _enemigo){
+    if(mundo[_enemigo.x + _enemigo.direccion][_enemigo.y] == d_muro){
+        _enemigo.direccion=_enemigo.direccion * -1;
+    }
+    mundo[_enemigo.x][_enemigo.y]=' ';
+    _enemigo.x = _enemigo.x + _enemigo.direccion;
+    mundo[_enemigo.x][_enemigo.y]=(char)4;
+}
+
+
+
+int main(){
+
+    //Muro Arriba
+    for(int i=0; i<79; i++){
+        mundo[i][0] = d_muro;
+    }
+    //Muro Abajo
+    for(int i=0; i<79; i++){
+        mundo[i][29] = d_muro;
+    }
+    //Muro Arriba
+    for(int i=0; i<30; i++){
+        mundo[0][i] = d_muro;
+    }
+    //Muro Arriba
+    for(int i=0; i<30; i++){
+        mundo[78][i] = d_muro;
+    }
+    for(int i=0;i<20; i++){
+        mundo[10][i] = d_muro;
+    }
+    for(int i=10;i<30; i++){
+        mundo[15][i] = d_muro;
+    }
+    for(int i=15;i<30; i++){
+        mundo[i][10] = d_muro;
+    }
+
+
+
+
+    guerrero.x=5;
+    guerrero.y=5;
+
+    enemigo1.x=3;
+    enemigo1.y=21;
+    enemigo1.direccion= -1;
+
+    mundo[guerrero.x][guerrero.y] =(char)1;
+    mundo[enemigo1.x][enemigo1.y] = (char)4;
+
+    bool Salir = false;
+    while(Salir == false){
+        while( !kbhit() ){//Detectta que se se ande teclaenado una tecla del teclado
+            ///Update
+            MoverEnemigoHorizontal(enemigo1);
+
+
+            ///Draw
+            goxy(0,0);
+            ImprimeMundo();
+        }
+
+
+        int keypress=getch();
+
+
+
+        if(keypress==72){//arriba
+            MoverPersonaje(guerrero.x, guerrero.y -1);}
+        if(keypress==80){//abajo
+            MoverPersonaje(guerrero.x, guerrero.y +1);}
+        if(keypress==75){//izquierda
+        MoverPersonaje(guerrero.x -1, guerrero.y);}
+        if(keypress==77){//derecha
+        MoverPersonaje(guerrero.x +1, guerrero.y);}
+        if(keypress==27){
+            Salir=true;
+        }
+    }
+
+
+
+
+
+
+    return 0;
+}
